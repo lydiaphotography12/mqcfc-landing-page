@@ -90,17 +90,7 @@
 
 <body>
 
-<div class="box">
-
-    <h1>Continue</h1>
-
-    <p>
-        Please complete the verification below
-        before continuing.
-    </p>
-
-
-    <div class="captcha">
+<div class="captcha">
 
         <div
             class="cf-turnstile"
@@ -109,7 +99,6 @@
         </div>
 
     </div>
-
 
     <button
         id="continueButton"
@@ -120,6 +109,29 @@
 
     </button>
 
+</div>
+
+    <p>
+        Please complete the verification below
+        before continuing.
+    </p>
+
+ <div class="captcha">
+
+        <div
+            class="cf-turnstile"
+            data-sitekey="YOUR_SITE_KEY"
+            data-callback="captchaComplete">
+        </div>
+
+    </div>
+    
+<button
+        id="continueButton"
+        disabled
+        onclick="continueToPage()">
+
+        Continue
 </div>
 
 
