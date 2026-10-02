@@ -1,1 +1,1 @@
-This is to add a captcha to the MQCFC to stop bots 
+This is to add a captcha to the MQFC to stop bots 
