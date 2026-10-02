@@ -8,59 +8,79 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Your Organisation</title>
+    <title>Continue</title>
 
-    <!-- Cap -->
+    <!-- Cloudflare Turnstile -->
     <script
-        src="https://cdn.jsdelivr.net/npm/@cap.js/widget@0.1.30"
-        async>
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+        async
+        defer>
     </script>
 
     <style>
 
         body {
             margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
             font-family: Arial, sans-serif;
+
             background: #111;
             color: white;
         }
 
-        .container {
-            max-width: 700px;
-            margin: auto;
-            padding: 60px 20px;
+        .box {
+            width: 90%;
+            max-width: 450px;
+
+            padding: 40px;
+
+            text-align: center;
+
+            background: #222;
+
+            border-radius: 12px;
         }
 
         h1 {
-            font-size: 60px;
+            margin-top: 0;
         }
 
-        form {
-            background: white;
-            color: black;
-            padding: 30px;
-            border-radius: 10px;
+        p {
+            color: #ccc;
+            line-height: 1.5;
         }
 
-        input,
-        textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0 20px;
-            box-sizing: border-box;
-        }
-
-        textarea {
-            height: 120px;
+        .captcha {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
         }
 
         button {
             width: 100%;
+
             padding: 14px;
-            background: black;
-            color: white;
+
             border: none;
+            border-radius: 6px;
+
+            background: white;
+            color: black;
+
+            font-size: 16px;
+            font-weight: bold;
+
             cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
     </style>
@@ -70,61 +90,67 @@
 
 <body>
 
-<div class="container">
+<div class="box">
 
-    <h1>Your Organisation</h1>
+    <h1>Continue</h1>
 
     <p>
-        Welcome to our website.
+        Please complete the verification below
+        before continuing.
     </p>
 
 
-    <form method="POST"
-          action="YOUR_FORM_ENDPOINT">
+    <div class="captcha">
 
-        <label>Name</label>
+        <div
+            class="cf-turnstile"
+            data-sitekey="0x4AAAAAAFMB9TexrDEPxSNS"
+            data-callback="captchaComplete">
+        </div>
 
-        <input
-            type="text"
-            name="name"
-            required
-        >
-
-
-        <label>Email</label>
-
-        <input
-            type="email"
-            name="email"
-            required
-        >
+    </div>
 
 
-        <label>Message</label>
+    <button
+        id="continueButton"
+        disabled
+        onclick="continueToPage()">
 
-        <textarea
-            name="message"
-            required>
-        </textarea>
+        Continue
 
-
-        <!-- CAP CAPTCHA -->
-
-        <cap-widget
-            id="cap"
-            data-cap-api-endpoint="https://YOUR-CAP-SERVER/">
-        </cap-widget>
-
-
-        <br>
-
-        <button type="submit">
-            Send Message
-        </button>
-
-    </form>
+    </button>
 
 </div>
+
+
+<script>
+
+    let captchaPassed = false;
+
+
+    function captchaComplete(token) {
+
+        captchaPassed = true;
+
+        document.getElementById(
+            "continueButton"
+        ).disabled = false;
+
+    }
+
+
+    function continueToPage() {
+
+        if (!captchaPassed) {
+            return;
+        }
+
+        window.location.href =
+            "https://google.com/";
+
+    }
+
+</script>
 
 </body>
 
