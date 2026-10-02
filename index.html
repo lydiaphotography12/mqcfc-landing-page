@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Continue</title>
 
@@ -18,152 +14,253 @@
     </script>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             margin: 0;
             min-height: 100vh;
 
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
 
-            font-family: Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
 
-            background: #111;
-            color: white;
+            background: #f5f5f5;
+            color: #111;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
         }
 
         .box {
-            width: 90%;
-            max-width: 450px;
+            background: white;
 
-            padding: 40px;
+            padding: 40px 30px;
+
+            border-radius: 12px;
 
             text-align: center;
 
-            background: #222;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
 
-            border-radius: 12px;
+        .logo {
+            display: block;
+
+            width: 140px;
+            max-width: 70%;
+            height: auto;
+
+            margin: 0 auto 25px;
         }
 
         h1 {
-            margin-top: 0;
+            margin: 0 0 10px;
+
+            font-size: 28px;
+            font-weight: 600;
         }
 
         p {
-            color: #ccc;
+            margin: 0 0 25px;
+
+            font-size: 15px;
             line-height: 1.5;
+
+            color: #666;
         }
 
         .captcha {
-            margin: 30px 0;
             display: flex;
             justify-content: center;
+
+            margin-bottom: 25px;
         }
 
-        button {
+        .continue-button {
             width: 100%;
 
-            padding: 14px;
+            padding: 13px 20px;
 
             border: none;
             border-radius: 6px;
 
-            background: white;
-            color: black;
+            background: #111;
+            color: white;
 
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
 
             cursor: pointer;
+
+            transition: opacity 0.2s ease,
+                        transform 0.2s ease;
         }
 
-        button:disabled {
-            opacity: 0.5;
+        .continue-button:hover:not(:disabled) {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+
+        .continue-button:disabled {
+            background: #ccc;
+            color: #888;
+
             cursor: not-allowed;
         }
 
+        .status {
+            min-height: 20px;
+
+            margin-top: 15px;
+
+            font-size: 13px;
+            color: #666;
+        }
+
+        @media (max-width: 480px) {
+            .box {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
     </style>
-
 </head>
-
 
 <body>
 
-<div class="captcha">
+    <div class="container">
 
-        <div
-            class="cf-turnstile"
-            data-sitekey="0x4AAAAAAFMB9TexrDEPxSNS"
-            data-callback="captchaComplete">
+        <div class="box">
+
+            <!-- LOGO -->
+            <img
+                src="logo.png"
+                alt="Logo"
+                class="logo">
+
+            <h1>Continue</h1>
+
+            <p>
+                Please complete the CAPTCHA below to continue.
+            </p>
+
+            <!-- CLOUDFLARE TURNSTILE -->
+            <div class="captcha">
+
+                <div
+                    class="cf-turnstile"
+                    data-sitekey="0x4AAAAAAFMB9TexrDEPxSNS"
+                    data-callback="captchaComplete"
+                    data-expired-callback="captchaExpired"
+                    data-error-callback="captchaError">
+                </div>
+
+            </div>
+
+            <!-- CONTINUE BUTTON -->
+            <button
+                id="continueButton"
+                class="continue-button"
+                type="button"
+                disabled
+                onclick="continueToPage()">
+
+                Continue
+
+            </button>
+
+            <div
+                id="status"
+                class="status">
+            </div>
+
         </div>
 
     </div>
 
-    <button
-        id="continueButton"
-        disabled
-        onclick="continueToPage()">
 
-        Continue
+    <script>
 
-    </button>
-
-</div>
-
-    <p>
-        Please complete the verification below
-        before continuing.
-    </p>
-
- <div class="captcha">
-
-        <div
-            class="cf-turnstile"
-            data-sitekey="YOUR_SITE_KEY"
-            data-callback="captchaComplete">
-        </div>
-
-    </div>
-    
-<button
-        id="continueButton"
-        disabled
-        onclick="continueToPage()">
-
-        Continue
-</div>
+        let captchaPassed = false;
 
 
-<script>
+        // CAPTCHA completed successfully
+        function captchaComplete(token) {
 
-    let captchaPassed = false;
+            captchaPassed = true;
 
+            const button =
+                document.getElementById("continueButton");
 
-    function captchaComplete(token) {
+            const status =
+                document.getElementById("status");
 
-        captchaPassed = true;
+            button.disabled = false;
 
-        document.getElementById(
-            "continueButton"
-        ).disabled = false;
-
-    }
-
-
-    function continueToPage() {
-
-        if (!captchaPassed) {
-            return;
+            status.textContent =
+                "CAPTCHA completed. You can continue.";
         }
 
-        window.location.href =
-            "ttps://bit.ly/manchesterqueerfashioncreativeswhatsappgroup";
 
-    }
+        // CAPTCHA expired
+        function captchaExpired() {
 
-</script>
+            captchaPassed = false;
+
+            const button =
+                document.getElementById("continueButton");
+
+            const status =
+                document.getElementById("status");
+
+            button.disabled = true;
+
+            status.textContent =
+                "CAPTCHA expired. Please complete it again.";
+        }
+
+
+        // CAPTCHA error
+        function captchaError() {
+
+            captchaPassed = false;
+
+            const button =
+                document.getElementById("continueButton");
+
+            const status =
+                document.getElementById("status");
+
+            button.disabled = true;
+
+            status.textContent =
+                "There was a CAPTCHA error. Please try again.";
+        }
+
+
+        // Continue to destination
+        function continueToPage() {
+
+            if (!captchaPassed) {
+                return;
+            }
+
+            window.location.href =
+                "https://bit.ly/manchesterqueerfashioncreativeswhatsappgroup";
+
+        }
+
+    </script>
 
 </body>
-
 </html>
